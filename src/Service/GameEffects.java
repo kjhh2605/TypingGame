@@ -68,7 +68,7 @@ public class GameEffects {
         comboPanel.repaint();
     }
     public static void addCombo(ComboPanel comboPanel,int curCombo){
-        comboPanel.setComboBar(curCombo,Color.black);//한칸 칠하고
+        comboPanel.paintComboBar(curCombo,Color.black);//한칸 칠하고
         comboPanel.drawComboBar();//다시 그림
 
         int n = curCombo+1;

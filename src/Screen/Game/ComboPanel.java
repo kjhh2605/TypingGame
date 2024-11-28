@@ -28,10 +28,10 @@ public class ComboPanel extends JPanel {
     public void drawComboBar(){//콤보 바 그리기
         comboBar = c.setComboBar(fullComboNum);
         comboUnitX = c.getUnitWidth(fullComboNum);
-        int startX=15;
+        int startX=15;//패널에서 그릴 위치
         for(JLabel unit : comboBar){
             unit.setLocation(startX,50);
-            startX+=comboUnitX;
+            startX+=comboUnitX;//콤보 한칸 씩 이어서 그리도록
             this.add(unit);
         }
     }
@@ -39,7 +39,7 @@ public class ComboPanel extends JPanel {
     public void setFullComboNum(int n){
         this.fullComboNum=n;
     }
-    public void setComboBar(int n,Color color){//배경색 변경 -> 콤보 증가
+    public void paintComboBar(int n,Color color){//배경색 변경 -> 콤보 증가
         comboBar[n].setBackground(color);
     }
 

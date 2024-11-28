@@ -63,7 +63,6 @@ public class MainFrame extends JFrame {
         cardLayout.show(mainPanel, name);
     }
 
-
     public void settingMenu() {//설정 메뉴바
         JMenuBar mb = new JMenuBar();
 

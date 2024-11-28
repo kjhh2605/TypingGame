@@ -7,34 +7,34 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
     public GameGroundPanel groundPanel = new GameGroundPanel();
-    private ComboPanel comboPanel    = new ComboPanel();
+    public ComboPanel comboPanel    = new ComboPanel();
     private TimerPanel timer = new TimerPanel();
-    private ConditionPanel conditionPanel = new ConditionPanel();
+    public ConditionPanel conditionPanel = new ConditionPanel();
+    //private으로 선언하고 게터로 참조하는게 좋은가?
     private InputPanel inputPanel;
 
     public GamePanel(MainFrame mainFrame) {
         setLayout(new BorderLayout());
         inputPanel = new InputPanel(mainFrame,groundPanel,conditionPanel,comboPanel);
-
-        setDifficulty("normal");//난이도 설정
-        comboPanel.drawComboBar();//난이도에 따른 콤보바 생성
-
         makeSplit();
     }
-    private void setDifficulty(String difficulty){//난이도 설정
+    public void setDifficulty(String difficulty){//난이도 설정
         switch(difficulty){
-            case("hard"):
+            case("Hard"):
                 inputPanel.setFullComboNum(10);
                 inputPanel.setFullHateCount(1);
                 comboPanel.setFullComboNum(10);
-            case("normal"):
+                break;
+            case("Normal"):
                 inputPanel.setFullComboNum(5);
                 inputPanel.setFullHateCount(3);
                 comboPanel.setFullComboNum(5);
-            case("easy"):
+                break;
+            case("Easy"):
                 inputPanel.setFullComboNum(3);
                 inputPanel.setFullHateCount(5);
                 comboPanel.setFullComboNum(3);
+                break;
         }
     }
     private void makeSplit(){

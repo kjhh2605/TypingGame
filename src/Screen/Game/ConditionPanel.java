@@ -1,5 +1,6 @@
 package Screen.Game;
 
+import Service.Combo;
 import Service.Condition;
 import Service.GameEffects;
 import javax.swing.*;
@@ -19,6 +20,7 @@ public class ConditionPanel extends JPanel {
         conditionText=Condition.getConditionText(1);
         conditionText.setBounds(50, 20, 200, 50);
         add(conditionText);
+
     }
 
 }

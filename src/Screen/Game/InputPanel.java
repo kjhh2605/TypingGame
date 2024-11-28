@@ -66,69 +66,70 @@ public class InputPanel extends JPanel {
 
     //입력한 단어를 확인 후 게임 효과 적용
     private void checkMyLabel(MainFrame mainFrame,GameGroundPanel ground, String t, ConditionPanel conditionPanel,ComboPanel comboPanel) {
-        Iterator<MyLabel> iterator = ground.labelsOnPanel.iterator();
-        while (iterator.hasNext()) {
-            MyLabel ml = iterator.next();
+        synchronized (ground.labelsOnPanel) {//iterator가 벡터를 순회하는 동안 수정하지 못하도록 synchronized
+            Iterator<MyLabel> iterator = ground.labelsOnPanel.iterator();
+            while (iterator.hasNext()) {
+                MyLabel ml = iterator.next();
 
-            if (ml.getLabel().getText().equals(t)) { // 입력한 단어에 해당하는 MyLabel을 찾고
-                switch (ml.getLabelType()) { // 해당 객체의 타입에 따라 효과 적용
-                    case "아디다스":
-                        curHateCount++;
-                        GameEffects.changeComboStack(comboPanel,curComboStack);// 콤보 초기화
-                        GameEffects.blur(ground); // 전체 블러 처리
-                        GameEffects.changeFace(conditionPanel, 0); // 표정변화
-                        GameEffects.changeConditionText(conditionPanel,0);// 상태 메세지 변화
-                        break;
-                    case "맥도날드":
-                        curComboStack+=2;
-                        if(curComboStack>=10) {
-                            curCombo++;
-                            GameEffects.addCombo(comboPanel,curCombo);
-                            curComboStack-=10;
-                            if(curComboStack==11)
-                                GameEffects.changeComboStack(comboPanel,1);
-                            else
-                                GameEffects.changeComboStack(comboPanel, curComboStack );// 콤보 += 2
-                            //excellent와 good조건 중복시 excellent 우선
-                            GameEffects.changeFace(conditionPanel,3);
-                            GameEffects.changeConditionText(conditionPanel,3);
-                        }
-                        else {
-                            GameEffects.changeComboStack(comboPanel, curComboStack );// 콤보 += 2
-                            GameEffects.changeFace(conditionPanel, 2);// 표정 변화
-                            GameEffects.changeConditionText(conditionPanel, 2);
-                        }
-                        break;
-                    default:
-                        curComboStack++;
-                        if(curComboStack>=10) {
-                            curCombo++;
-                            GameEffects.addCombo(comboPanel,curCombo);
-                            curComboStack-=10;//스택 초기화
-                            GameEffects.changeFace(conditionPanel,3);
-                            GameEffects.changeConditionText(conditionPanel,3);
-                        }
-                        GameEffects.changeComboStack(comboPanel,curComboStack);// 콤보 ++
-                }
-                iterator.remove();
+                if (ml.getLabel().getText().equals(t)) { // 입력한 단어에 해당하는 MyLabel을 찾고
+                    switch (ml.getLabelType()) { // 해당 객체의 타입에 따라 효과 적용
+                        case "아디다스":
+                            curHateCount++;
+                            GameEffects.changeComboStack(comboPanel, curComboStack);// 콤보 초기화
+                            GameEffects.blur(ground); // 전체 블러 처리
+                            GameEffects.changeFace(conditionPanel, 0); // 표정변화
+                            GameEffects.changeConditionText(conditionPanel, 0);// 상태 메세지 변화
+                            break;
+                        case "맥도날드":
+                            curComboStack += 2;
+                            if (curComboStack >= 10) {
+                                curCombo++;
+                                GameEffects.addCombo(comboPanel, curCombo);
+                                curComboStack -= 10;
+                                if (curComboStack == 11)
+                                    GameEffects.changeComboStack(comboPanel, 1);
+                                else
+                                    GameEffects.changeComboStack(comboPanel, curComboStack);// 콤보 += 2
+                                //excellent와 good조건 중복시 excellent 우선
+                                GameEffects.changeFace(conditionPanel, 3);
+                                GameEffects.changeConditionText(conditionPanel, 3);
+                            } else {
+                                GameEffects.changeComboStack(comboPanel, curComboStack);// 콤보 += 2
+                                GameEffects.changeFace(conditionPanel, 2);// 표정 변화
+                                GameEffects.changeConditionText(conditionPanel, 2);
+                            }
+                            break;
+                        default:
+                            curComboStack++;
+                            if (curComboStack >= 10) {
+                                curCombo++;
+                                GameEffects.addCombo(comboPanel, curCombo);
+                                curComboStack -= 10;//스택 초기화
+                                GameEffects.changeFace(conditionPanel, 3);
+                                GameEffects.changeConditionText(conditionPanel, 3);
+                            }
+                            GameEffects.changeComboStack(comboPanel, curComboStack);// 콤보 ++
+                    }
+                    iterator.remove();
 
-                if(curCombo==fullComboNum-1) {//게임 종료(성공)
-                    ground.startGameThread.interrupt();
-                    new javax.swing.Timer(2000, e -> {
-                        mainFrame.showPanel("SuccessPanel");
-                        GameEffects.playSound("/Audio/runaway.wav");//성공
-                        ((javax.swing.Timer) e.getSource()).stop(); // Timer 종료
-                    }).start();
+                    if (curCombo == fullComboNum - 1) {//게임 종료(성공)
+                        ground.startGameThread.interrupt();
+                        new javax.swing.Timer(2000, e -> {
+                            mainFrame.showPanel("SuccessPanel");
+                            GameEffects.playSound("/Audio/runaway.wav");//성공
+                            ((javax.swing.Timer) e.getSource()).stop(); // Timer 종료
+                        }).start();
 
-                }
+                    }
 
-                if(curHateCount==fullHateCount){//게임 종료(실패)
-                    ground.startGameThread.interrupt();
-                    new javax.swing.Timer(2000, e -> {
-                        mainFrame.showPanel("FailedPanel");
-                        GameEffects.playSound("/Audio/24.wav");//성공
-                        ((javax.swing.Timer) e.getSource()).stop(); // Timer 종료
-                    }).start();
+                    if (curHateCount == fullHateCount) {//게임 종료(실패)
+                        ground.startGameThread.interrupt();
+                        new javax.swing.Timer(2000, e -> {
+                            mainFrame.showPanel("FailedPanel");
+                            GameEffects.playSound("/Audio/24.wav");//성공
+                            ((javax.swing.Timer) e.getSource()).stop(); // Timer 종료
+                        }).start();
+                    }
                 }
             }
         }

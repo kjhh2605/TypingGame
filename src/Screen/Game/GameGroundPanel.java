@@ -21,7 +21,6 @@ public class GameGroundPanel extends JPanel {
     public GameGroundPanel() {
         setLayout(null);
         new MakeLabel(this);
-        //startGame();
     }
 
     class StartGameThread extends Thread{
@@ -69,19 +68,17 @@ public class GameGroundPanel extends JPanel {
 
                 if(y>height){//화면 벗어나면
                     remove(l);//패널의 레이블 삭제
-                    Iterator<MyLabel> iterator = labelsOnPanel.iterator();
-                    int index = -1;
-                    while (iterator.hasNext()) {
-                        MyLabel ml = iterator.next();
 
-                        // 벗어난 레이블에 해당하는 MyLabel을 찾고
-                        if(ml.getLabelType().equals(l.getText())) {
-                            index = labelsOnPanel.indexOf(ml);
+                    synchronized (labelsOnPanel) {//iterator가 벡터를 순회하는 동안 수정하지 못하도록 synchronized
+                        Iterator<MyLabel> iterator = labelsOnPanel.iterator();
+
+                        while (iterator.hasNext()) {
+                            MyLabel ml = iterator.next();
+                            // 벗어난 레이블에 해당하는 MyLabel을 찾고
+                            if (ml.getLabelType().equals(l.getText())) {
+                                iterator.remove();//삭제
+                            }
                         }
-//                            iterator.remove();//삭제
-                    }
-                    if (index != -1) {
-                        labelsOnPanel.remove(index);
                     }
                 }
                 else
