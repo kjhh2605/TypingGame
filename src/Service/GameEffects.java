@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import Setting.Setting;
 
 public class GameEffects {
 
@@ -44,6 +43,7 @@ public class GameEffects {
             ((javax.swing.Timer) e.getSource()).stop(); // Timer 종료
         }).start();
     }
+
     private static void updateConditionText(ConditionPanel conditionPanel, int n) {
         conditionPanel.remove(conditionPanel.conditionText);
         conditionPanel.conditionText = Condition.getConditionText(n);
@@ -68,12 +68,18 @@ public class GameEffects {
         comboPanel.repaint();
     }
     public static void addCombo(ComboPanel comboPanel,int curCombo){
-        comboPanel.paintComboBar(curCombo,Color.black);//한칸 칠하고
-        comboPanel.drawComboBar();//다시 그림
+        comboPanel.paintComboBar(curCombo,Color.GRAY);//한칸 칠하고
+        comboPanel.draw();//다시 그림
 
         int n = curCombo+1;
         String audioPath = "/Audio/"+n+".wav";
         playSound(audioPath);//효과음
+    }
+    public static void increaseWarningBar(ConditionPanel conditionPanel, int curWarningCount,int n){
+        for(int i=curWarningCount;i<(curWarningCount+n);i++) {
+            conditionPanel.paintWarningBar(i, Color.black);
+        }
+        conditionPanel.draw();
     }
 
     public static void playSound(String path){

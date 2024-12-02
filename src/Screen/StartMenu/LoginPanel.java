@@ -10,23 +10,23 @@ import java.awt.event.ActionListener;
 
 public class LoginPanel extends JPanel {
     private Image backgroundImage = new ImageIcon(getClass().getResource("/images/로그인.png")).getImage();
-    private JTextField inputId = new JTextField(10);
-    private JLabel msg = new JLabel("공연이 곧 시작합니다...");
+
+    private JComboBox<String> difficultyBox;
     private String[] difficultyList = {"Easy","Normal","Hard"};
+
+    private JTextField inputId = new JTextField(10); //id 입력
+
+    private JLabel msg = new JLabel("공연이 곧 시작합니다...");
 
     public LoginPanel(MainFrame mainFrame, Setting setting,GamePanel gamePanel){
         setLayout(null);
+
+
         //난이도 설정
-        JComboBox<String> difficultyBox = new JComboBox<>(difficultyList);
-        difficultyBox.setBounds(450,480,100,20);
-        difficultyBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String difficulty = (String)difficultyBox.getSelectedItem();
-                gamePanel.setDifficulty(difficulty);//선택 값에 따라 난이도 설정하고
-                gamePanel.comboPanel.drawComboBar();//설정값에 따라 콤보바 생성
-            }
-        });
+        difficultyBox = new JComboBox<>(difficultyList);
+        difficultyBox.setBounds(440,490,120,30);
+        difficultyBox.setBackground(Color.LIGHT_GRAY);
+        difficultyBox.setFont(new Font("SansSerif", Font.BOLD, 18));
         add(difficultyBox);
 
         //아이디 입력창
@@ -49,7 +49,11 @@ public class LoginPanel extends JPanel {
         startBtn.addActionListener(new ActionListener() {//버튼 누르면 게임스레드 실행
             @Override
             public void actionPerformed(ActionEvent e) {
-                gamePanel.groundPanel.startGame();
+                String difficulty = (String) difficultyBox.getSelectedItem();//사용자가 선택한 난이도
+                gamePanel.setDifficulty(difficulty);//난이도 설정하고
+                gamePanel.comboPanel.initComboBar();//난이도에 따라 콤보바 생성
+                gamePanel.conditionPanel.initWarningBar();
+                gamePanel.groundPanel.startGame();//게임 스레드 실행
             }
         });
         add(startBtn);
