@@ -46,10 +46,10 @@ public class Combo {
         return comboBar;
     }
 
-    public void drawComboBar(Panel myPanel,JLabel[] comboBar, int comboUnitX){
-        int startX=15;//패널에서 그릴 위치
+    public void drawComboBar(JPanel myPanel,JLabel[] comboBar, int comboUnitX, int setX,int setY){
+        int startX=setX;//패널에서 그릴 위치
         for(JLabel unit : comboBar){
-            unit.setLocation(startX,50);
+            unit.setLocation(startX,setY);
             startX+=comboUnitX;//콤보 한칸 씩 이어서 그리도록
             myPanel.add(unit);
         }

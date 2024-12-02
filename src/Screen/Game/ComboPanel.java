@@ -25,15 +25,14 @@ public class ComboPanel extends JPanel {
 
         //drawComboBar();
     }
-    public void drawComboBar(){//콤보 바 그리기
+    public void initComboBar(){
         comboBar = c.setComboBar(fullComboNum);
         comboUnitX = c.getUnitWidth(fullComboNum);
-        int startX=15;//패널에서 그릴 위치
-        for(JLabel unit : comboBar){
-            unit.setLocation(startX,50);
-            startX+=comboUnitX;//콤보 한칸 씩 이어서 그리도록
-            this.add(unit);
-        }
+        c.drawComboBar(this,comboBar,comboUnitX,15,50);
+    }
+
+    public void draw(){
+        c.drawComboBar(this,comboBar,comboUnitX,15,50);
     }
 
     public void setFullComboNum(int n){

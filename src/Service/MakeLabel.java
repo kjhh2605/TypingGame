@@ -48,7 +48,7 @@ public class MakeLabel {//랜덤한 단어 레이블 생성
     public static JLabel makeLabel(){//랜덤 확률로 떨어지는 레이블 생성
         int n = (int)(Math.random()*10);//확률 설정을 위한 난수
 
-        if(n==0){//10% 확률
+        if(n==0){//10% 확률||n==3||n==4||n==5
             JLabel label = setLabel(11,ground);//아디다스 = iconList[11]
             MyLabel ml = new MyLabel("아디다스", label);
             ground.labelsOnPanel.add(ml);

@@ -11,17 +11,17 @@ import Screen.MainFrame;
 import Service.GameEffects;
 import Service.MyLabel;
 
+//copyOnWriteArrayList
+
 public class InputPanel extends JPanel {
     private int fullComboNum;
-    private int fullHateCount;
-    private int curHateCount=0;
+    private int fullWarningCount;
+
     private int curCombo = -1;
     private int curComboStack = 0;
-
+    private int curWarningCount=0;
 
     private JTextField text = new JTextField(10);//최대 10글자
-
-
 
     public InputPanel(MainFrame mainFrame,GameGroundPanel ground,ConditionPanel conditionPanel,ComboPanel comboPanel) {
         this.setBackground(Color.LIGHT_GRAY);
@@ -40,6 +40,8 @@ public class InputPanel extends JPanel {
                         if(t.equals(label.getText())) {//JLabel의 텍스트가 입력한 텍스트와 같으면
                             tf.setText("");//텍스트 필드 지우기
                             ground.remove(label);//레이블 제거
+                            ground.deleteFallingLabelThread(label);//스레드 삭제
+
                             checkMyLabel(mainFrame, ground,t,conditionPanel,comboPanel);//제거한 레이블에 따른 효과 적용
                             ground.repaint();//화면 다시 그리기
                         }
@@ -55,13 +57,23 @@ public class InputPanel extends JPanel {
     public void setFullComboNum(int n){
         this.fullComboNum = n;
     }
-    public void setFullHateCount(int n){
-        this.fullHateCount=n;
+    public void setFullWarningCount(int n){
+        this.fullWarningCount =n;
     }
     public void reset(){//초기화
-        this.curHateCount=0;
+        this.curWarningCount =-1;
         this.curCombo=-1;
         this.curComboStack=0;
+    }
+
+    public int getCurWarningCount(){
+        return curWarningCount;
+    }
+    public void setCurWarningCount(int n){
+        this.curWarningCount = n;
+    }
+    public int getFullWarningCount(){
+        return fullWarningCount;
     }
 
     //입력한 단어를 확인 후 게임 효과 적용
@@ -70,11 +82,11 @@ public class InputPanel extends JPanel {
             Iterator<MyLabel> iterator = ground.labelsOnPanel.iterator();
             while (iterator.hasNext()) {
                 MyLabel ml = iterator.next();
-
                 if (ml.getLabel().getText().equals(t)) { // 입력한 단어에 해당하는 MyLabel을 찾고
                     switch (ml.getLabelType()) { // 해당 객체의 타입에 따라 효과 적용
                         case "아디다스":
-                            curHateCount++;
+                            //curWarningCount+=3;
+                            GameEffects.increaseWarningBar(conditionPanel,curWarningCount+=3,3);//경고 스택 증가
                             GameEffects.changeComboStack(comboPanel, curComboStack);// 콤보 초기화
                             GameEffects.blur(ground); // 전체 블러 처리
                             GameEffects.changeFace(conditionPanel, 0); // 표정변화
@@ -122,7 +134,7 @@ public class InputPanel extends JPanel {
 
                     }
 
-                    if (curHateCount == fullHateCount) {//게임 종료(실패)
+                    if (curWarningCount == fullWarningCount-1) {//게임 종료(실패)
                         ground.startGameThread.interrupt();
                         new javax.swing.Timer(2000, e -> {
                             mainFrame.showPanel("FailedPanel");
