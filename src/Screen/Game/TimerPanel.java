@@ -1,40 +1,60 @@
 package Screen.Game;
 
+import Service.MyTimer;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.time.Duration;
+import java.time.Instant;
 
 public class TimerPanel extends JPanel{
-    public TimerPanel(){
-        JLabel timerLabel = new JLabel("0");
-        timerLabel.setFont(new Font("SanSerif",Font.BOLD,80));
-        add(timerLabel);
-        Thread th = new TimerThread(timerLabel,1000);//스레드 생성(Thread 클래스)
-       // th.start();//스레드 시작(JVM에게, 스케줄링 해도 됨)
+    private final JLabel timerLabel = new JLabel("00 : 00 : 00");
+    private MyTimer t;
+    private GameGroundPanel groundPanel;
+    private TimerThread timerThread;
+
+    public TimerPanel(GameGroundPanel groundPanel){
+        this.groundPanel = groundPanel; //시작 시간 받아오기 위함
+        t = new MyTimer();
+        setLayout(new BorderLayout());
+        timerLabel.setFont(new Font("SansSerif", Font.BOLD, 40));//폰트 설정
+        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);//수평 가운데 정렬
+        add(timerLabel,BorderLayout.CENTER);
     }
-    class TimerThread extends Thread{
-        private JLabel label = null;
-        private int delay = 0;
 
-        public TimerThread(JLabel label,int delay) {
-            this.label = label;
-            this.delay = delay;
+    public void resetTimerLabel() {
+        timerLabel.setText("00 : 00 : 00");
+        repaint();
+    }
+
+    public void startTimer() {
+        if (timerThread == null || !timerThread.isAlive()) {
+            timerThread = new TimerThread();
+            timerThread.start();
         }
+    }
 
+    public void stopTimer() {
+        if (timerThread != null && timerThread.isAlive()) {
+            timerThread.interrupt();
+        }
+    }
+
+    class TimerThread extends Thread{
         @Override
-        public void run() {//이 주소에서 실행을 시작하도록 TCB에 기록 -> 스레드 코드
-            int n =1;
+        public void run() {
+            Instant startTime = groundPanel.getStartTime();
             while(true){
-                label.setText(Integer.toString(n));
-                n++;
+                timerLabel.setText(t.setTimerText(startTime));
+                repaint();
                 try {
-                    Thread.sleep(delay);//1000ms 는 1초
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
-                    Container c = label.getParent();//업캐스팅
-                    c.remove(label);//컴포넌트를 컨테이너에서 제거
-                    c.repaint();
-                    return;//[run]의 리턴 -> 스레드 종료
+                    return;
                 }
             }
         }
     }
+
 }

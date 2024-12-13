@@ -47,10 +47,10 @@ public class MainFrame extends JFrame {
         LoginPanel loginPanel = new LoginPanel(this,setting,gamePanel);
         mainPanel.add(loginPanel,"LoginPanel");
         //결과 패널(성공)
-        EndPanel successPanel = new EndPanel(this,setting,true);
+        EndPanel successPanel = new EndPanel(this,gamePanel,setting,true);
         mainPanel.add(successPanel,"SuccessPanel");
         //결과 패널(실패)
-        EndPanel failedPanel = new EndPanel(this,setting,false);
+        EndPanel failedPanel = new EndPanel(this,gamePanel,setting,false);
         mainPanel.add(failedPanel,"FailedPanel");
 
 

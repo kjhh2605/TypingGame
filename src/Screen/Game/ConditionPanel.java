@@ -13,6 +13,7 @@ public class ConditionPanel extends JPanel {
     private int fullWarningNum;
     private int warningUnitX;
     private Combo c;
+
     public ConditionPanel(){
         setLayout(null);
         new Condition();
@@ -41,8 +42,20 @@ public class ConditionPanel extends JPanel {
         this.fullWarningNum=n;
     }
 
-    public void paintWarningBar(int n,Color color){//배경색 변경 -> 콤보 증가
+    public void paintWarningBar(int n,Color color) {//배경색 변경 -> 콤보 증가
         warningBar[n].setBackground(color);
+        this.repaint();
     }
+
+    public void resetWarningBar() {
+        if (warningBar != null) {
+            for (JLabel label : warningBar) {
+                this.remove(label); // warningBar의 각 요소를 패널에서 제거
+            }
+            warningBar = null; // 배열 초기화
+            this.repaint();
+        }
+    }
+
 
 }

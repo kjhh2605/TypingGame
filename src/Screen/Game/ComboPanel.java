@@ -15,16 +15,15 @@ public class ComboPanel extends JPanel {
     public ComboPanel(){
         setLayout(null);
         this.setBackground(Color.LIGHT_GRAY);
-
         c = new Combo();
+    }
 
-        //콤보 스택 레이블
+    public void initComboStackLabel(){
         comboStackLabel = c.getComboStackLabel(0);
         comboStackLabel.setLocation(80,115);
         this.add(comboStackLabel);
-
-        //drawComboBar();
     }
+
     public void initComboBar(){
         comboBar = c.setComboBar(fullComboNum);
         comboUnitX = c.getUnitWidth(fullComboNum);
@@ -42,5 +41,22 @@ public class ComboPanel extends JPanel {
         comboBar[n].setBackground(color);
     }
 
+    public void resetComboStackLabel(){
+        if(comboStackLabel!=null){
+            this.remove(comboStackLabel);
+        }
+        comboStackLabel = null;
+        this.repaint();
+    }
+
+    public void resetComboBar(){
+        if (comboBar != null) {
+            for (JLabel label : comboBar) {
+                this.remove(label); // warningBar의 각 요소를 패널에서 제거
+            }
+            comboBar = null; // 배열 초기화
+            this.repaint();
+        }
+    }
 
 }

@@ -66,6 +66,7 @@ public class GameEffects {
         comboPanel.comboStackLabel.setLocation(80,115);
         comboPanel.add(comboPanel.comboStackLabel);
         comboPanel.repaint();
+        System.out.print("스택증가 ");
     }
     public static void addCombo(ComboPanel comboPanel,int curCombo){
         comboPanel.paintComboBar(curCombo,Color.GRAY);//한칸 칠하고
@@ -76,6 +77,7 @@ public class GameEffects {
         playSound(audioPath);//효과음
     }
     public static void increaseWarningBar(ConditionPanel conditionPanel, int curWarningCount,int n){
+
         for(int i=curWarningCount;i<(curWarningCount+n);i++) {
             conditionPanel.paintWarningBar(i, Color.black);
         }

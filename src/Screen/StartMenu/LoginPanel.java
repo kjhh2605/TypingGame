@@ -1,5 +1,6 @@
 package Screen.StartMenu;
 
+import Screen.Game.ConditionPanel;
 import Screen.Game.GamePanel;
 import Screen.MainFrame;
 import Setting.Setting;
@@ -49,11 +50,20 @@ public class LoginPanel extends JPanel {
         startBtn.addActionListener(new ActionListener() {//버튼 누르면 게임스레드 실행
             @Override
             public void actionPerformed(ActionEvent e) {
+                //이전 게임패널 초기화
+                gamePanel.reset();//설정 값 초기화
+                gamePanel.conditionPanel.resetWarningBar();//이전 warningBar삭제
+                gamePanel.comboPanel.resetComboStackLabel();
+                gamePanel.comboPanel.resetComboBar();//이전 comboBar삭제
+
                 String difficulty = (String) difficultyBox.getSelectedItem();//사용자가 선택한 난이도
                 gamePanel.setDifficulty(difficulty);//난이도 설정하고
+                gamePanel.comboPanel.initComboStackLabel();
                 gamePanel.comboPanel.initComboBar();//난이도에 따라 콤보바 생성
                 gamePanel.conditionPanel.initWarningBar();
                 gamePanel.groundPanel.startGame();//게임 스레드 실행
+
+                
             }
         });
         add(startBtn);

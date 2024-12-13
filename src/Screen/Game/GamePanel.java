@@ -7,18 +7,23 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
 
-    public ComboPanel comboPanel    = new ComboPanel();
-    private TimerPanel timer = new TimerPanel();
-    public ConditionPanel conditionPanel = new ConditionPanel();
+    public ComboPanel comboPanel;
+    private TimerPanel timerPanel;
+    public ConditionPanel conditionPanel;
     public GameGroundPanel groundPanel;
     //private으로 선언하고 게터로 참조하는게 좋은가?
     private InputPanel inputPanel;
 
     public GamePanel(MainFrame mainFrame) {
         setLayout(new BorderLayout());
-        groundPanel  = new GameGroundPanel(null,conditionPanel);
-        inputPanel = new InputPanel(mainFrame,groundPanel,conditionPanel,comboPanel);
-        groundPanel.setInputPanel(inputPanel);
+        comboPanel = new ComboPanel();
+        conditionPanel = new ConditionPanel();
+        groundPanel  = new GameGroundPanel();
+        inputPanel = new InputPanel(mainFrame);
+        timerPanel = new TimerPanel(groundPanel);
+
+        groundPanel.init(inputPanel, conditionPanel, mainFrame,timerPanel);
+        inputPanel.init(groundPanel, conditionPanel, comboPanel,timerPanel);
 
         makeSplit();
     }
@@ -44,6 +49,12 @@ public class GamePanel extends JPanel {
                 break;
         }
     }
+    public void reset(){//설정 값 초기화
+        inputPanel.setCurWarningCount(-1);
+        inputPanel.setCurComboStack(0);
+        inputPanel.setCurCombo(-1);
+    }
+
     private void makeSplit(){
         JSplitPane mPane = new JSplitPane();//게임 진행 & 게임 정보
         mPane.setDividerLocation(700);
@@ -64,8 +75,8 @@ public class GamePanel extends JPanel {
         cPane.setDividerLocation(200);
         cPane.setEnabled(false);
         cPane.setDividerSize(1);
-        cPane.setTopComponent(comboPanel);//점수 패널 추가
-        cPane.setBottomComponent(timer);//입력 패널 추가
+        cPane.setTopComponent(comboPanel);//콤보 패널 추가
+        cPane.setBottomComponent(timerPanel);//타이머 패널 추가
 
         JSplitPane rPane = new JSplitPane();// (콤보,타이머) & 얼굴
         rPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
