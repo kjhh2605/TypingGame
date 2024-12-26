@@ -28,3 +28,6 @@
     - **경고스택이 5번 쌓이면 실패**
     - **콤보를 10번 쌓으면 성공**
     - **최대 45픽셀씩 떨어짐**
+
+
+![image](https://github.com/user-attachments/assets/34f24757-70e3-4cd1-bb03-33a20d7a9beb)
